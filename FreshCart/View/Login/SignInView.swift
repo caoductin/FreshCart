@@ -22,8 +22,8 @@ struct SignInView: View {
                 Image("images")
                     .resizable()
                     .scaledToFill()
-                    .frame(maxWidth: .infinity)
-                    .frame(height: .screenHeight/2)
+                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 2)
+                    .clipped()
                 Spacer()
               
            
@@ -63,7 +63,7 @@ struct SignInView: View {
                         
                     }
                     // Navigation to LoginView
-                                    NavigationLink(destination: SignUpView()) {
+                                    NavigationLink(destination: LoginView()) {
                                         ButtonCustom(
                                             title: "Sign in with email",
                                             startColor: .blue,
@@ -133,7 +133,7 @@ struct SignInView: View {
             })
             .ignoresSafeArea()
             .navigationTitle("")
-          
+           
             .navigationBarBackButtonHidden(true)
             .navigationDestination(isPresented: $navigateToNextView) {
                 SignUpView()

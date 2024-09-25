@@ -7,12 +7,26 @@
 
 import SwiftUI
 
-struct ImageMD: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
+class ImageMD: Identifiable,Equatable {
+    //    var id: ObjectIdentifier
+    
+    var id: Int = 0
+    var prod_id: Int = 0
+    var image: String = ""
 
-#Preview {
-    ImageMD()
+
+    
+    init(dict: NSDictionary) {
+        self.id = dict.value(forKey: "img_id") as? Int ?? 0
+        
+        
+        self.prod_id = dict.value(forKey: "prod_id") as? Int ?? 0
+        
+        
+        self.image = dict.value(forKey: "image") as? String ?? ""
+        
+    }
+    static func == (lhs: ImageMD,rhs: ImageMD) ->Bool{
+        return lhs.id == rhs.id
+    }
 }

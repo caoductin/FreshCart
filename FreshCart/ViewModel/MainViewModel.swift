@@ -16,12 +16,21 @@ class MainViewModel: ObservableObject{
     
     @Published var showError = false
     @Published var errorMessage = ""
+    @Published var isUserLogin: Bool = false
+    @Published var userObj: UserMD = UserMD(dict: [:])
     init(){
-//        txtUserName = "cao duc tin"
-//        txtEmail = "caoductin@gmail.com"
-//        txtPassword = "123456"
-    
+    #if DEBUG
+        txtUserName = "user4"
+      txtEmail = "test@gmail.com"
+      txtPassword = "123456"
+      #endif
     }
+    
+    func logout(){
+        Utils.UDSET(data: false, key: Globs.userLogin)
+        isUserLogin = false
+    }
+    
 
     //MARK: ServiceCall
     func serviceCallSignUp(){
@@ -47,18 +56,11 @@ class MainViewModel: ObservableObject{
             if let respone = responseObj as? NSDictionary{
                 if respone.value(forKey: KKey.status) as? String ?? "" == "1"{
                     
-                    var payload = respone.value(forKey: KKey.payload) as? NSDictionary ?? [:]
-                    Utils.UDSET(data: payload, key: Globs.userpayload)
-                    Utils.UDSET(data: true, key: Globs.userLogin)
-                    
-                    self.txtEmail = ""
-                    self.txtPassword = ""
-                    self.txtUserName = ""
-                    self.isShowPassword = false
-                    
+                    let payload = respone.value(forKey: KKey.payload) as? NSDictionary ?? [:]
+                    self.setUserData(uDict: payload)
                     print(respone)
-                    self.errorMessage = respone.value(forKey: KKey.message) as? String ?? "Success"
-                    self.showError = true
+//                    self.errorMessage = respone.value(forKey: KKey.message) as? String ?? "Success"
+//                    self.showError = true
                 }
                 else{
                     self.errorMessage = respone.value(forKey: KKey.message) as? String ?? "Success"
@@ -67,7 +69,7 @@ class MainViewModel: ObservableObject{
                 }
             }
         } failure: { error in
-            //error is optional so we use optional chaining to safely access the localizedDescription property if it exsits
+            //error is optional so we use optional chaining to safely access the localizedDescription property if it exsits	
             self.errorMessage = error?.localizedDescription ?? "Fail"
             self.showError = true
             
@@ -92,19 +94,16 @@ class MainViewModel: ObservableObject{
                 if respone.value(forKey: KKey.status) as? String ?? "" == "1"{
                    
                     
-                    var payload = respone.value(forKey: KKey.payload) as? NSDictionary ?? [:]
-                    Utils.UDSET(data: payload, key: Globs.userpayload)
-                    Utils.UDSET(data: true, key: Globs.userLogin)
-                    
+                    let payload = respone.value(forKey: KKey.payload) as? NSDictionary ?? [:]
+                    self.setUserData(uDict: payload)
                     print(respone)// print to see the respone from server
-                    
-                    
-                    self.txtEmail = ""
-                    self.txtPassword = ""
-                    self.isShowPassword = false
-                    
-                    self.errorMessage = respone.value(forKey: KKey.message) as? String ?? "Success"
-                    self.showError = true
+                    DispatchQueue.main.async {
+                        self.isUserLogin = true
+                    }
+                    print("this is a user login\(self.isUserLogin)")
+
+//                    self.errorMessage = respone.value(forKey: KKey.message) as? String ?? "Success"
+//                    self.showError = true
                 }
                 else{
                     self.errorMessage = respone.value(forKey: KKey.message) as? String ?? "Success"
@@ -121,6 +120,18 @@ class MainViewModel: ObservableObject{
 
     }
     
+    func setUserData(uDict: NSDictionary){
+        Utils.UDSET(data: uDict, key: Globs.userpayload)
+        Utils.UDSET(data: true, key: Globs.userLogin)
+        self.userObj = UserMD(dict: uDict)
+        self.isUserLogin = true
+        
+        self.txtEmail = ""
+        self.txtPassword = ""
+        self.txtUserName = ""   
+        self.isShowPassword = false
+        
+    }
 
 
     

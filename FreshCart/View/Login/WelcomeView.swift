@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct WelcomeView: View {
+    @EnvironmentObject var mainVM: MainViewModel
+
     var body: some View {
     
         NavigationStack {
@@ -39,13 +41,22 @@ struct WelcomeView: View {
                                   .multilineTextAlignment(.center)
                                   .frame(width: 300)
                 
-                    NavigationLink(destination: SignInView()) {
+                    NavigationLink(destination: 
+                        SignInView()
+                    ) {
                         Text("Get started")
                             .padding()
                             .background(Color.blue)
                             .foregroundColor(.white)
                             .cornerRadius(8)
                     }
+                    Button {
+                        MainViewModel.shared.isUserLogin = true
+                    
+                    } label: {
+                        Text("please click here")
+                    }
+
                
 
                                                  
@@ -69,7 +80,9 @@ struct WelcomeView: View {
 }
 
 #Preview {
- 
-        WelcomeView()
+
+         WelcomeView()
+  
     
 }
+

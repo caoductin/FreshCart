@@ -40,33 +40,36 @@ extension CGFloat {
         return screenHeight * per
     }
     
-    static var topInsets: Double {
-        if let keyWindow = UIApplication.shared.keyWindow {
-            return keyWindow.safeAreaInsets.top
-        }
-        return 0.0
-    }
-    
-    static var bottomInsets: Double {
-        if let keyWindow = UIApplication.shared.keyWindow {
-            return keyWindow.safeAreaInsets.bottom
-        }
-        return 0.0
-    }
-    
-    static var horizontalInsets: Double {
-        if let keyWindow = UIApplication.shared.keyWindow {
-            return keyWindow.safeAreaInsets.left + keyWindow.safeAreaInsets.right
-        }
-        return 0.0
-    }
-    
-    static var verticalInsets: Double {
-        if let keyWindow = UIApplication.shared.keyWindow {
-            return keyWindow.safeAreaInsets.top + keyWindow.safeAreaInsets.bottom
-        }
-        return 0.0
-    }
+    static var currentKeyWindow: UIWindow? {
+          return UIApplication.shared
+              .connectedScenes
+              .filter { $0.activationState == .foregroundActive }
+              .compactMap { $0 as? UIWindowScene }
+              .first?.windows
+              .first { $0.isKeyWindow }
+      }
+      
+      // Top inset
+      static var topInsets: Double {
+          return Double(currentKeyWindow?.safeAreaInsets.top ?? 0.0)
+      }
+      
+      // Bottom inset0
+      static var bottomInsets: Double {
+          return Double(currentKeyWindow?.safeAreaInsets.bottom ?? 0.0)
+      }
+      
+      // Horizontal insets (left + right)
+      static var horizontalInsets: Double {
+          guard let safeAreaInsets = currentKeyWindow?.safeAreaInsets else { return 0.0 }
+          return safeAreaInsets.left + safeAreaInsets.right
+      }
+      
+      // Vertical insets (top + bottom)
+      static var verticalInsets: Double {
+          guard let safeAreaInsets = currentKeyWindow?.safeAreaInsets else { return 0.0 }
+          return safeAreaInsets.top + safeAreaInsets.bottom
+      }
     
 }
 

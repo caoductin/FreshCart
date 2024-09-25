@@ -16,7 +16,7 @@ struct UserMD: Identifiable,Equatable {
     var email: String = ""
     var mobile: String = ""
     var mobile_code: String = ""
-    var auth_token: String = ""
+    var authToken: String = ""
     
     init(dict: NSDictionary) {
         self.id = dict.value(forKey: "user_id") as? Int ?? 0
@@ -31,7 +31,7 @@ struct UserMD: Identifiable,Equatable {
 
         self.mobile_code = dict.value(forKey: "mobile_code") as? String ?? ""
 
-        self.auth_token = dict.value(forKey: "auth_token") as? String ?? ""
+        self.authToken = dict.value(forKey: "auth_token") as? String ?? ""
 
     }
     static func == (lhs: UserMD,rhs: UserMD) ->Bool{

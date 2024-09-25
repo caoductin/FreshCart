@@ -8,8 +8,22 @@
 import SwiftUI
 
 struct SectionTitle: View {
+    @State var titleLeft:String = "Title left"
+    @State var titleRight: String = "Title right"
+    var didTab:(()->())?
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        HStack{
+            Text(titleLeft)
+             
+                .font(.customfont(.bold, fontSize: 26))
+            Spacer()
+            Text(titleRight)
+                .font(.customfont(.bold, fontSize: 16))
+                .foregroundStyle(.green.opacity(0.8))
+
+        }
+        .frame(height: 35)
+
     }
 }
 

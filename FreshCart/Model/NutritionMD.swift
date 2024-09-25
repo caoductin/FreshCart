@@ -11,22 +11,22 @@ class NutritionMD: Identifiable,Equatable {
     //    var id: ObjectIdentifier
     
     var id: Int = 0
-    var name: String = ""
-    var image: String = ""
-    var color: Color = .black
+    var nutrition_name: String = ""
+    var nutrition_value: String = ""
+
 
     
     init(dict: NSDictionary) {
-        self.id = dict.value(forKey: "type_id") as? Int ?? 0
+        self.id = dict.value(forKey: "nutrition_id") as? Int ?? 0
         
-        self.name = dict.value(forKey: "type_name") as? String ?? ""
         
-        self.image = dict.value(forKey: "image") as? String ?? ""
+        self.nutrition_name = dict.value(forKey: "nutrition_name") as? String ?? ""
         
-        self.color = Color(hex: dict.value(forKey: "color") as? String ?? "000000")
+        
+        self.nutrition_value = dict.value(forKey: "nutrition_value") as? String ?? ""
         
     }
-    static func == (lhs: TypeMD,rhs: TypeMD) ->Bool{
+    static func == (lhs: NutritionMD,rhs: NutritionMD) ->Bool{
         return lhs.id == rhs.id
     }
 }

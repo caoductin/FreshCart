@@ -5,18 +5,41 @@
 //  Created by cao duc tin  on 19/8/24.
 //
 
+
+
 import Foundation
 
-extension String{
+extension String {
     
-    func isValidEmail() -> Bool {
-            // Regular expression pattern for validating an email address
-            let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-            
-            // Create an NSPredicate with the regular expression
-            let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
-            
-            // Evaluate the string against the regular expression
-            return emailTest.evaluate(with: self)
+    var isValidEmail: Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+        let emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
+        return emailTest.evaluate(with: self)
+    }
+    
+    func stringDateToDate(format: String = "yyyy-MM-dd'T'HH:mm:ss.SSSZ") -> Date? {
+        let dataFormat = DateFormatter()
+        dataFormat.dateFormat = format
+        return dataFormat.date(from: self)
+    }
+    
+    func stringDateChangeFormat(format: String, newFormat: String ) -> String {
+        let dataFormat = DateFormatter()
+        dataFormat.dateFormat = format
+        if let dt = dataFormat.date(from: self) {
+            dataFormat.dateFormat = newFormat
+            return dataFormat.string(from: dt)
+        }else{
+            return ""
         }
+    }
+}
+
+extension Date {
+    func displayDate(format: String, addMinTime:  Int = 0) -> String {
+        let dataFormat = DateFormatter()
+        dataFormat.dateFormat = format
+        let date = self.addingTimeInterval(TimeInterval(60 * addMinTime))
+        return dataFormat.string(from: date)
+    }
 }

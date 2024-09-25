@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct LoginView: View {
-    @Environment(\.isPresented) private var isPresented
+    @Environment(\.dismiss) var dismiss
     @State var txtEmail: String = ""
-    @StateObject var loginVM = MainViewModel.shared;
+    @StateObject var loginVM = MainViewModel.shared
     var body: some View {
         ZStack{
 //            Image("")
@@ -19,8 +19,6 @@ struct LoginView: View {
 //                .frame(width: .screenWidth,height: .screenHeight)
             
             VStack{
-                
-            
                 
                 Image(systemName: "applelogo")
                     
@@ -60,9 +58,14 @@ struct LoginView: View {
                     .padding(.top,30)
                     .padding(.bottom,40)
                     .frame(minWidth: 0,maxWidth: .infinity ,alignment: .trailing)
-                
+//                Button(action: {
+//                    MainViewModel.shared.isUserLogin = true
+//                }, label: {
+//                    Text("logout")
+//                })
                 ButtonCustom(title: "Login",image: nil) {
                     loginVM.serviceCallLogin()
+
                 }
                 NavigationLink {
                     SignUpView()
@@ -93,7 +96,7 @@ struct LoginView: View {
             VStack{
                 HStack{
                     Button(action: {
-                     
+                        dismiss()
                     }, label: {
                         Image("left")
                             .resizable()
@@ -114,6 +117,10 @@ struct LoginView: View {
                 dismissButton: .default(Text("OK"))
             )
         }
+        .navigationDestination(isPresented: $loginVM.isUserLogin) {
+            MainView()
+        }
+
         .navigationTitle("")
         .navigationBarBackButtonHidden()
         .toolbar(.hidden)
@@ -127,3 +134,4 @@ struct LoginView: View {
         LoginView()
     }
 }
+

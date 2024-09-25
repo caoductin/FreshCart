@@ -11,7 +11,7 @@ struct SignUpView: View {
     
     @Environment(\.isPresented) private var isPresented
     @Environment(\.dismiss) var dismiss
-    @StateObject var signupVM = MainViewModel.shared;
+    @StateObject var signupVM = MainViewModel.shared
     var body: some View {
       
         ZStack{
@@ -57,7 +57,12 @@ struct SignUpView: View {
                     
                     CustomSecureField(txt: $signupVM.txtPassword,title:"Password",placeholder: "Enter your password",isShowPassword: $signupVM.isShowPassword)
                         .modifier(ShowButton(isShow: $signupVM.isShowPassword))
-             
+                    
+                    Button(action: {
+                        MainViewModel.shared.isUserLogin = true
+                    }, label: {
+                        Text("logout")
+                    })
                                         
                     ButtonCustom(title: "Sign up",image: nil) {
                         signupVM.serviceCallSignUp()
@@ -117,7 +122,11 @@ struct SignUpView: View {
             )
         }
         .navigationTitle("")
-        //.toolbar(.hidden)
+        .navigationDestination(isPresented: $signupVM.isUserLogin, destination: {
+            MainView()
+        })
+        .navigationBarBackButtonHidden()
+        .toolbar(.hidden)
         .ignoresSafeArea()
     }
 }

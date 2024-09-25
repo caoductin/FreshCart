@@ -13,7 +13,7 @@ import UIKit
 
 class ServiceCall {
     
-    class func post(parameter: NSDictionary, path: String, isToken: Bool = false, withSuccess: @escaping ( (_ responseObj: AnyObject?) ->() ), failure: @escaping ( (_ error: Error?) ->() ) ) {
+    class func post(parameter: NSDictionary, path: String, isToken: Bool = true, withSuccess: @escaping ( (_ responseObj: AnyObject?) ->() ), failure: @escaping ( (_ error: Error?) ->() ) ) {
         
         DispatchQueue.global(qos: .background).async {
                    
@@ -35,12 +35,23 @@ class ServiceCall {
                            i += 1
                        }
             
-            //let parameters = "email=test%40gmail.com&password=123456&dervice_token="
-                //    let postData =  parameters.data(using: .utf8)
+        
             
                     var request = URLRequest(url: URL(string: path)!,timeoutInterval: Double.infinity)
                     request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-            
+                
+                    if(isToken){
+//                                       #if DEBUG
+//                                       request.addValue( "HFYsmcPickQlPmWMNUEZ" , forHTTPHeaderField: "access_token")
+//                                       #else
+                        if (MainViewModel.shared.userObj.authToken.isEmpty){
+                            request.addValue( "w0Xjhwha33GrEB1CE6lq" , forHTTPHeaderField: "access_token")
+                        }
+                        else{
+                            request.addValue( MainViewModel.shared.userObj.authToken , forHTTPHeaderField: "access_token")
+                        }
+//                                       #endif
+                    }
                     request.httpMethod = "POST"
                     request.httpBody = parameterData as Data
             
@@ -76,7 +87,7 @@ class ServiceCall {
                         
                         return
                       }
-                      print(String(data: data, encoding: .utf8)!)
+//                      print(String(data: data, encoding: .utf8)!)
                     }
             
                     task.resume()
